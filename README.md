@@ -55,8 +55,8 @@ cp .env.example .env
 Edit `.env`:
 
 ```
-PK=your_private_key_here
-RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
+PK=your_private_key_here # Ethereum private key
+RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY # Polygon RPC URL
 ```
 
 Get a free Polygon RPC URL at [alchemy.com/polygon](https://www.alchemy.com/polygon).
