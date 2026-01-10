@@ -59,6 +59,8 @@ PK=your_private_key_here
 RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY
 ```
 
+Get a free Polygon RPC URL at [alchemy.com/polygon](https://www.alchemy.com/polygon).
+
 4. Run the recovery script:
 
 ```bash
@@ -76,7 +78,7 @@ bun run sell
 
 ## Configuration
 
-Edit [walletConfig.ts](src/walletConfig.ts) to enable/disable operations per wallet type:
+Edit [wallet-config.ts](src/wallet-config.ts) to enable/disable operations per wallet type:
 
 ```typescript
 export const walletConfig = {
