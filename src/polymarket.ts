@@ -1,3 +1,4 @@
+import { log } from "console";
 import { ethers } from "ethers";
 import { proxyFactoryAbi, safeAbi } from "./abis";
 import { erc1155Abi } from "./abis/erc1155Abi";
@@ -134,7 +135,7 @@ export async function getProxyAddress(
       );
       const balance = await usdcContract.balanceOf(proxyAddress);
       if (balance.gt(0)) {
-        console.log(
+        log(
           `  Warning: ${ethers.utils.formatUnits(
             balance,
             USDCE_DIGITS,
@@ -276,22 +277,22 @@ export async function discoverWalletsWithStatus(
 }
 
 export function printWalletStatus(statuses: WalletStatus[]): void {
-  console.log("Wallet Status:");
+  log("Wallet Status:");
   for (const s of statuses) {
     const balStr = formatUSDC(s.balance);
     if (s.type === "Proxy" && !s.deployed) {
       if (s.stuckFunds && s.stuckFunds.gt(0)) {
-        console.log(
+        log(
           `  Proxy: not deployed (${formatUSDC(
             s.stuckFunds,
           )} USDC stuck at ${s.stuckAddress?.slice(0, 10)}...)`,
         );
       } else {
-        console.log(`  Proxy: not deployed`);
+        log(`  Proxy: not deployed`);
       }
     } else {
       const tradeStatus = s.canTrade ? "[can trade]" : "[no CLOB]";
-      console.log(
+      log(
         `  ${s.type}: ${s.address.slice(
           0,
           10,
@@ -432,7 +433,7 @@ export async function getPositionsWithBalance(
   );
   if (balances.size === 0) return [];
 
-  console.log(`  Found ${balances.size} position(s) with balance`);
+  log(`  Found ${balances.size} position(s) with balance`);
 
   // Only fetch CLOB info for tokens with balance
   const positions: PositionInfo[] = [];
@@ -771,7 +772,7 @@ export async function withdrawProxyUSDC(
     await tx.wait();
     return balance;
   } catch (e) {
-    console.log(`  Proxy withdraw error: ${(e as Error).message.slice(0, 50)}`);
+    log(`  Proxy withdraw error: ${(e as Error).message.slice(0, 50)}`);
     return ethers.BigNumber.from(0);
   }
 }

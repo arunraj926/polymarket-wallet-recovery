@@ -1,5 +1,6 @@
-import "dotenv/config";
 import { ClobClient, OrderType, Side, TickSize } from "@polymarket/clob-client";
+import { error, log } from "console";
+import "dotenv/config";
 import { ethers } from "ethers";
 import {
   CHAIN_ID,
@@ -54,7 +55,7 @@ async function buyForWallet(
     const clobClient = await getClobClient(wallet, walletInfo);
 
     const size = TRADE_AMOUNT / market.price;
-    console.log(
+    log(
       `  ${walletInfo.type}: buying ~${size.toFixed(
         2,
       )} tokens @ $${market.price.toFixed(2)} (${marketType})`,
@@ -67,14 +68,12 @@ async function buyForWallet(
     );
 
     if (result.success) {
-      console.log(`  ${walletInfo.type}: bought ${size.toFixed(2)} tokens`);
+      log(`  ${walletInfo.type}: bought ${size.toFixed(2)} tokens`);
       return true;
     }
-    console.log(
-      `  ${walletInfo.type}: buy failed - ${result.errorMsg || "unknown"}`,
-    );
+    log(`  ${walletInfo.type}: buy failed - ${result.errorMsg || "unknown"}`);
   } catch (e) {
-    console.log(
+    log(
       `  ${walletInfo.type}: buy error - ${(e as Error).message.slice(0, 40)}`,
     );
   }
@@ -96,7 +95,7 @@ async function placeLimitOrder(
     const limitPrice = Math.max(0.01, market.price - 0.2);
     const size = Math.max(5, TRADE_AMOUNT / limitPrice);
 
-    console.log(
+    log(
       `  ${walletInfo.type}: limit buy ~${size.toFixed(
         2,
       )} tokens @ $${limitPrice.toFixed(2)} (${marketType})`,
@@ -115,7 +114,7 @@ async function placeLimitOrder(
     const result = await clobClient.postOrder(order, OrderType.GTC);
 
     if (result.success) {
-      console.log(
+      log(
         `  ${walletInfo.type}: limit order placed (id: ${result.orderID?.slice(
           0,
           8,
@@ -123,13 +122,13 @@ async function placeLimitOrder(
       );
       return true;
     }
-    console.log(
+    log(
       `  ${walletInfo.type}: limit order failed - ${
         result.errorMsg || "unknown"
       }`,
     );
   } catch (e) {
-    console.log(
+    log(
       `  ${walletInfo.type}: limit error - ${(e as Error).message.slice(
         0,
         40,
@@ -140,7 +139,7 @@ async function placeLimitOrder(
 }
 
 async function main() {
-  console.log("Buy Test\n");
+  log("Buy Test\n");
 
   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
   const wallet = new ethers.Wallet(process.env.PK!, provider);
@@ -158,35 +157,33 @@ async function main() {
     const currentBalance = await getUSDCBalance(safeWallet.address, provider);
     if (currentBalance.lt(FUNDING_PER_WALLET)) {
       const needed = FUNDING_PER_WALLET.sub(currentBalance);
-      console.log(`\nFunding Safe with ${formatUSDC(needed)} USDC...`);
+      log(`\nFunding Safe with ${formatUSDC(needed)} USDC...`);
       if (await fundWallet(wallet, safeWallet.address, needed, provider)) {
-        console.log("  Funded");
+        log("  Funded");
       }
     }
   }
 
   // Set up approvals
-  console.log("\nSetting up approvals...");
+  log("\nSetting up approvals...");
   if (await setupEOAApprovals(wallet, provider)) {
-    console.log("  EOA approvals set");
+    log("  EOA approvals set");
   }
   if (safeWallet) {
     if (await setupSafeApprovals(wallet, safeWallet.address, provider)) {
-      console.log("  Safe approvals set");
+      log("  Safe approvals set");
     }
   }
 
   // Find active markets
-  console.log("\nFinding markets...");
+  log("\nFinding markets...");
   const { ctfMarket, negRiskMarket } = await findActiveMarkets();
 
   if (ctfMarket) {
-    console.log(
-      `  CTF: ${ctfMarket.question}... @ $${ctfMarket.price.toFixed(2)}`,
-    );
+    log(`  CTF: ${ctfMarket.question}... @ $${ctfMarket.price.toFixed(2)}`);
   }
   if (negRiskMarket) {
-    console.log(
+    log(
       `  NegRisk: ${negRiskMarket.question}... @ $${negRiskMarket.price.toFixed(
         2,
       )}`,
@@ -194,18 +191,18 @@ async function main() {
   }
 
   if (!ctfMarket && !negRiskMarket) {
-    console.log("  No markets found - exiting");
+    log("  No markets found - exiting");
     return;
   }
 
   // Place both market orders and limit orders
-  console.log("\nBuying positions (market orders)...");
+  log("\nBuying positions (market orders)...");
   let marketCount = 0;
   let limitCount = 0;
 
   for (const w of wallets) {
     if (!walletConfig[w.type]?.marketBuy) {
-      console.log(`  ${w.type}: market buy disabled`);
+      log(`  ${w.type}: market buy disabled`);
       continue;
     }
     if (ctfMarket) {
@@ -217,10 +214,10 @@ async function main() {
     }
   }
 
-  console.log("\nPlacing limit orders...");
+  log("\nPlacing limit orders...");
   for (const w of wallets) {
     if (!walletConfig[w.type]?.limitOrder) {
-      console.log(`  ${w.type}: limit orders disabled`);
+      log(`  ${w.type}: limit orders disabled`);
       continue;
     }
     if (ctfMarket) {
@@ -232,16 +229,13 @@ async function main() {
     }
   }
 
-  // Summary
-  console.log("\nSummary:");
+  log("\nSummary:");
   for (const w of wallets) {
     const bal = await getUSDCBalance(w.address, provider);
-    console.log(`  ${w.type}: ${formatUSDC(bal)} USDC`);
+    log(`  ${w.type}: ${formatUSDC(bal)} USDC`);
   }
-  console.log(`\nMarket buys: ${marketCount}, Limit orders: ${limitCount}`);
-  console.log("\nNext: run bun src/sellAndRedeem.ts");
+  log(`\nMarket buys: ${marketCount}, Limit orders: ${limitCount}`);
+  log("\nNext: run bun src/sellAndRedeem.ts");
 }
 
-// Usage: bun buy
-
-main().catch(console.error);
+main().catch(error);
