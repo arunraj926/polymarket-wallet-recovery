@@ -169,45 +169,6 @@ export function calculateProxyAddress(
   );
 }
 
-export async function discoverWallets(
-  wallet: ethers.Wallet,
-  provider: ethers.providers.Provider,
-): Promise<WalletInfo[]> {
-  const wallets: WalletInfo[] = [];
-
-  // EOA
-  wallets.push({
-    address: wallet.address,
-    type: "EOA",
-    deployed: true,
-    signatureType: 0,
-  });
-
-  // Proxy wallet
-  const proxyInfo = await getProxyAddress(wallet.address, provider);
-  if (proxyInfo) {
-    wallets.push({
-      address: proxyInfo.address,
-      type: "Proxy",
-      deployed: proxyInfo.deployed,
-      signatureType: 0,
-    });
-  }
-
-  // Safe wallet
-  const safeAddress = await getSafeAddress(wallet.address, provider);
-  if (safeAddress) {
-    wallets.push({
-      address: safeAddress,
-      type: "Safe",
-      deployed: true,
-      signatureType: 2,
-    });
-  }
-
-  return wallets;
-}
-
 export async function discoverWalletsWithStatus(
   wallet: ethers.Wallet,
   provider: ethers.providers.Provider,
@@ -497,69 +458,6 @@ export async function getPositionsWithBalance(
   }
 
   return positions;
-}
-
-export async function getPositionInfo(
-  tokenId: string,
-  walletAddress: string,
-  ctfContract: ethers.Contract,
-): Promise<PositionInfo | null> {
-  try {
-    const decimalTokenId = ethers.BigNumber.from(tokenId).toString();
-    const balance = await ctfContract.balanceOf(walletAddress, tokenId);
-    if (balance.lte(0)) return null;
-
-    let price = 0,
-      tickSize = "0.01",
-      negRisk = false,
-      marketActive = false;
-
-    try {
-      const tickResp = await fetch(
-        `${CLOB_HOST}/tick-size?token_id=${decimalTokenId}`,
-      );
-      if (tickResp.ok) {
-        const tickData = await tickResp.json();
-        if (tickData.minimum_tick_size) {
-          tickSize = tickData.minimum_tick_size.toString();
-          marketActive = true;
-        }
-      }
-    } catch {}
-
-    if (marketActive) {
-      try {
-        const priceResp = await fetch(
-          `${CLOB_HOST}/price?token_id=${decimalTokenId}&side=sell`,
-        );
-        if (priceResp.ok) {
-          const priceData = await priceResp.json();
-          price = parseFloat(priceData.price || "0");
-        }
-      } catch {}
-
-      try {
-        const negRiskResp = await fetch(
-          `${CLOB_HOST}/neg-risk?token_id=${decimalTokenId}`,
-        );
-        if (negRiskResp.ok) {
-          const negRiskData = await negRiskResp.json();
-          negRisk = negRiskData.neg_risk || false;
-        }
-      } catch {}
-    }
-
-    return {
-      tokenId: decimalTokenId,
-      balance,
-      price,
-      tickSize,
-      negRisk,
-      isResolved: !marketActive || price >= 0.999,
-    };
-  } catch {
-    return null;
-  }
 }
 
 // ============================================================================
